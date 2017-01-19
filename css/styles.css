@@ -1,0 +1,11 @@
+div#result {
+  height: 500px;
+  width: 500px;
+  background-color: black;
+  font-size: 1.5em;
+  color: black;
+}
+
+div#result:hover {
+  color: #1ec503;
+}

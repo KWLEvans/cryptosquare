@@ -1,4 +1,6 @@
 //Back-end
+
+//Adds white space to increase string length to square number
 function normalizeInput(input,sideLength) {
   var result = "";
   for (i = input.length; i < Math.pow(sideLength, 2); i++) {
@@ -8,7 +10,8 @@ function normalizeInput(input,sideLength) {
   return result;
 }
 
-function otherLoop(index, array) {
+//Loops through an array logging letter at given index for every string in the array
+function innerLoop(index, array) {
   var newString = "";
   array.forEach(function(item) {
     newString += item[index];
@@ -16,37 +19,39 @@ function otherLoop(index, array) {
   return newString;
 }
 
+//Slices final string into 5 letter "words"
 function chop(string) {
-  var newArray = [];
-  var newString;
-  for (i = 0; i < string.length; i+= 5) {
-    newArray.push(string.slice(i, i+5));
-  }
-  console.log(newArray);
-  newString = newArray.join(" ");
+  var newArray = buildArray(string, 5);
+  var newString = newArray.join(" ");
   return newString;
 }
 
-function buildEncrypted(input, sideLength) {
-  var returnedString = "";
-  var firstArray = [];
-  var newString = "";
-  input = normalizeInput(input, sideLength);
-  for (var i = 0; i < input.length; i = i + sideLength) {
-    var sideString = input.slice(i, i + sideLength);
-    firstArray.push(sideString);
+//Builds a square array of a given side length from a given string
+function buildArray(string, elementLength) {
+  var array = [];
+  for (var i = 0; i < string.length; i += elementLength) {
+    array.push(string.slice(i, i + elementLength));
   }
-  console.log(firstArray);
+  return array;
+}
+
+//Builds the encrypted string to be returned to user
+function buildEncryptedString(input, sideLength) {
+  input = normalizeInput(input, sideLength);
+  var squareArray = buildArray(input, sideLength);
+  var newString = "";
+
   for (var i = 0; i < sideLength; i++) {
-      newString += otherLoop(i, firstArray);
+      newString += innerLoop(i, squareArray);
   }
   return newString.replace(/\s*/gi, "");
 }
 
+//Formats user input and constructs encrypted result which it returns to the front-end
 function encrypt(input) {
   var result = input.replace(/\W*/gi, "");
   var square = Math.ceil(Math.sqrt(result.length));
-  var encrypt = buildEncrypted(result, square).toLowerCase();
+  var encrypt = buildEncryptedString(result, square).toLowerCase();
   var final = chop(encrypt);
 
   return final;
@@ -57,7 +62,7 @@ $(function() {
   $("#encryptor").submit(function(event) {
     event.preventDefault();
 
-    var input = $("#encryptor input").val();
+    var input = $("#encryptor textarea").val();
     var result = encrypt(input);
 
     $("#result").text(result);
