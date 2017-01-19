@@ -22,6 +22,7 @@ function chop(string) {
   for (i = 0; i < string.length; i+= 5) {
     newArray.push(string.slice(i, i+5));
   }
+  console.log(newArray);
   newString = newArray.join(" ");
   return newString;
 }
@@ -35,10 +36,11 @@ function buildEncrypted(input, sideLength) {
     var sideString = input.slice(i, i + sideLength);
     firstArray.push(sideString);
   }
+  console.log(firstArray);
   for (var i = 0; i < sideLength; i++) {
       newString += otherLoop(i, firstArray);
   }
-  return newString;
+  return newString.replace(/\s*/gi, "");
 }
 
 function encrypt(input) {
