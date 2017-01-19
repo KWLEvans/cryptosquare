@@ -1,13 +1,10 @@
 //Back-end
 function normalizeInput(input,sideLength) {
   var result = "";
-  console.log("sideLength: " + sideLength);
   for (i = input.length; i < Math.pow(sideLength, 2); i++) {
     result += " ";
   }
   result = input + result;
-  console.log(result + "!");
-  console.log(input.length);
   return result;
 }
 
@@ -19,20 +16,25 @@ function otherLoop(index, array) {
   return newString;
 }
 
+function chop(string) {
+  var newArray = [];
+  var newString;
+  for (i = 0; i < string.length; i+= 5) {
+    newArray.push(string.slice(i, i+5));
+  }
+  newString = newArray.join(" ");
+  return newString;
+}
+
 function buildEncrypted(input, sideLength) {
   var returnedString = "";
   var firstArray = [];
   var newString = "";
   input = normalizeInput(input, sideLength);
-  console.log(input + "!");
-
   for (var i = 0; i < input.length; i = i + sideLength) {
     var sideString = input.slice(i, i + sideLength);
-    console.log("loop " + i + ": " + sideString);
     firstArray.push(sideString);
   }
-  console.log(firstArray);
-
   for (var i = 0; i < sideLength; i++) {
       newString += otherLoop(i, firstArray);
   }
@@ -42,9 +44,10 @@ function buildEncrypted(input, sideLength) {
 function encrypt(input) {
   var result = input.replace(/\W*/gi, "");
   var square = Math.ceil(Math.sqrt(result.length));
-  var final = buildEncrypted(result, square);
+  var encrypt = buildEncrypted(result, square).toLowerCase();
+  var final = chop(encrypt);
 
-  return final.toLowerCase();
+  return final;
 }
 
 //Front-end
